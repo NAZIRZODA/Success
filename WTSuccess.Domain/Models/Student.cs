@@ -13,6 +13,6 @@ namespace WTSuccess.Domain.Models
         public string Email { get; set; }
         public string Password { get; set; }
         public bool Gender { get; set; }
-        public List<Course>? Courses { get; set; }
+        public virtual List<Course>? Courses { get; set; }
     }
 }

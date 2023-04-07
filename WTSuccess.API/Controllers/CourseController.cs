@@ -7,7 +7,7 @@ using WTSuccess.Application.Responses.CourseRespnses;
 
 namespace WTSuccess.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("Course/[controller]")]
     [ApiController]
     public class CourseController : ControllerBase
     {
@@ -32,14 +32,14 @@ namespace WTSuccess.API.Controllers
 
         // POST api/<ValuesController>
         [HttpPost]
-        public void Post([FromBody] CourseRequestModel course)
+        public void Post([FromBody] CreateCourseRequestModel course)
         {
             _courseService.Add(course);
         }
 
         // PUT api/<ValuesController>/5
         [HttpPut("{id}")]
-        public void Put(ulong id, [FromBody] CourseRequestModel course)
+        public void Put(ulong id, [FromBody] UpdateCourseRequestModel course)
         {
             _courseService.Update(id, course);
         }

@@ -9,7 +9,7 @@ namespace WTSuccess.Domain.Models
     public class Course : EntityBase
     {
         public string Name { get; set; }
-        public List<Chapter> Chapters { get; set; }
-        public List<Student> Students { get; set; }
+        public virtual List<Chapter>? Chapters { get; set; }
+        public virtual List<Student>? Students { get; set; }
     }
 }

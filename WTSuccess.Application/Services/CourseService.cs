@@ -17,12 +17,15 @@ namespace WTSuccess.Application.Services
 {
     public class CourseService : BaseService<Course, CourseResponseModel, CourseRequestModel>, ICourseService
     {
-        private readonly IRepository<Course> _repository;
+        private readonly ICourseRepository _courseRepository;
+        private readonly IChapterRepository _chapterRepository;
         private readonly IMapper _mapper;
-        public CourseService(IRepository<Course> repository, IMapper mapper) : base(repository, mapper)
+
+        public CourseService(ICourseRepository repository, IMapper mapper, IChapterRepository chapterRepository) : base(repository, mapper)
         {
-            _repository = repository;
+            _courseRepository = repository;
             _mapper = mapper;
+            _chapterRepository = chapterRepository;
         }
 
         public override void Add(CourseRequestModel request)
@@ -30,13 +33,13 @@ namespace WTSuccess.Application.Services
             var parsedToCreate = request as CreateCourseRequestModel;
             if (parsedToCreate == null) throw new ArgumentNullException(nameof(Course));
             var mappedToChapter = _mapper.Map<CreateCourseRequestModel, Course>(parsedToCreate);
-            _repository.Add(mappedToChapter);
-            _repository.SaveChanges();
+            _courseRepository.Add(mappedToChapter);
+            _courseRepository.SaveChanges();
         }
 
         public override CourseResponseModel Get(ulong id)
         {
-            var dbChapter = _repository.FindById(id);
+            var dbChapter = _courseRepository.FindById(id);
             if (dbChapter == null) throw new ArgumentNullException(nameof(Course));
             var mappedToResponse = _mapper.Map<Course, CourseResponseModel>(dbChapter);
             return mappedToResponse;
@@ -44,30 +47,44 @@ namespace WTSuccess.Application.Services
 
         public override IEnumerable<CourseResponseModel> GetAll(int pageList, int pageNumber)
         {
-            var dbCourse = _repository.GetAll(pageList, pageNumber);
+            var dbCourse = _courseRepository.GetAll(pageList, pageNumber);
             var mappedToRespones = _mapper.Map<IEnumerable<Course>, IEnumerable<CourseResponseModel>>(dbCourse);
             return mappedToRespones;
         }
 
         public override CourseResponseModel Update(ulong id, CourseRequestModel request)
         {
-            var dbCourse = _repository.FindById(id);
+            var dbCourse = _courseRepository.FindById(id);
             if (dbCourse == null) throw new ArgumentNullException(nameof(Course));
             var courseRequestToUpdate = request as UpdateCourseRequestModel;
             dbCourse.Name = courseRequestToUpdate.Name;
-            dbCourse.Chapters = courseRequestToUpdate.Chapters;
-            dbCourse.Students = courseRequestToUpdate.Students;
-            _repository.Update(dbCourse);
-            _repository.SaveChanges();
+            //dbCourse.Chapters = courseRequestToUpdate.Chapters;
+            //dbCourse.Students = courseRequestToUpdate.Students;
+            _courseRepository.Update(dbCourse);
+            _courseRepository.SaveChanges();
             return _mapper.Map<UpdateCourseRequestModel, CourseResponseModel>(courseRequestToUpdate);
+        }
+
+        public void AddChapter(ulong chapterId, ulong courseId)
+        {
+            var chapter = _chapterRepository.FindById(chapterId);
+            if (chapter == null) throw new ArgumentNullException(nameof(Chapter));
+            var course = _courseRepository.FindById(courseId);
+            if (course == null) throw new ArgumentNullException(nameof(Course));
+            List<Chapter> chapters = new List<Chapter>();
+            chapters = course.Chapters;
+            chapters.Add(chapter);
+            course.Chapters = chapters;
+            _courseRepository.Add(course);
+            _courseRepository.SaveChanges();
         }
 
         public override bool Delete(ulong id)
         {
-            var dbCourse = _repository.FindById(id);
+            var dbCourse = _courseRepository.FindById(id);
             if (dbCourse == null) throw new ArgumentNullException(nameof(Course));
-            _repository.Delete(dbCourse);
-            _repository.SaveChanges();
+            _courseRepository.Delete(dbCourse);
+            _courseRepository.SaveChanges();
             return true;
         }
     }

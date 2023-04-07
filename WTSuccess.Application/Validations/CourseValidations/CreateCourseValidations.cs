@@ -13,7 +13,7 @@ namespace WTSuccess.Application.Validations.CourseValidations
         public CreateCourseValidations()
         {
             RuleFor(c => c.Name).NotNull().NotEmpty();
-            RuleFor(c => c.Chapters).NotNull().NotEmpty();
+            //RuleFor(c => c.Chapters).NotNull().NotEmpty();
         }
     }
 }

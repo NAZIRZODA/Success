@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using WTSuccess.Domain.Models;
 
-namespace WTSuccess.Application.Requests.ChapterRequests
+namespace WTSuccess.Application.Common.Interfaces.Repositories
 {
-    public class UpdateChapterRequestModel : ChapterRequestModel
+    public interface IChapterRepository : IRepository<Chapter>
     {
-   
+
     }
 }

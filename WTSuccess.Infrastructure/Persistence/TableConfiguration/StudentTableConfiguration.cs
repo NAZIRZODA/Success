@@ -15,7 +15,8 @@ namespace WTSuccess.Infrastructure.Persistence.TableConfiguration
         {
             builder.ToTable(nameof(Student));
             builder.HasKey(t => t.Id);
-            builder.Property(t => t.Id).UseIdentityAlwaysColumn();
+            builder.Property(t => t.Id).ValueGeneratedOnAdd();
+            builder.HasMany(c => c.Courses).WithMany(s => s.Students);
         }
     }
 }

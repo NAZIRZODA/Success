@@ -11,8 +11,8 @@ using WTSuccess.Infrastructure.Persistence.DataBases;
 namespace WTSuccess.Infrastructure.Migrations
 {
     [DbContext(typeof(EFContext))]
-    [Migration("20230326110738_CreateInitial")]
-    partial class CreateInitial
+    [Migration("20230406004803_UpdatedProperties")]
+    partial class UpdatedProperties
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,8 +45,12 @@ namespace WTSuccess.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(20,0)");
 
-                    b.Property<decimal>("CourseId")
+                    b.Property<decimal?>("CourseId")
                         .HasColumnType("numeric(20,0)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -79,6 +83,9 @@ namespace WTSuccess.Infrastructure.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("Gender")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -136,9 +143,7 @@ namespace WTSuccess.Infrastructure.Migrations
                 {
                     b.HasOne("WTSuccess.Domain.Models.Course", "Course")
                         .WithMany("Chapters")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CourseId");
 
                     b.Navigation("Course");
                 });

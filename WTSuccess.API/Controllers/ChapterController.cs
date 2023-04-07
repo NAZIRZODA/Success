@@ -8,7 +8,7 @@ using WTSuccess.Application.Responses.ChapterRespones;
 
 namespace WTSuccess.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("Chapter/[controller]")]
     [ApiController]
     public class ChapterController : ControllerBase
     {
@@ -33,7 +33,7 @@ namespace WTSuccess.API.Controllers
 
         // POST api/<ChapterController>
         [HttpPost]
-        public void Post([FromBody] ChapterRequestModel chapter)
+        public void Post([FromBody] CreateChapterRequestModel chapter)
         {
             _chapterService.Add(chapter);
         }

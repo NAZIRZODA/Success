@@ -6,7 +6,7 @@ using WTSuccess.Domain.Models;
 
 namespace WTSuccess.API.Controllers
 {
-    [Route("api/controller")]
+    [Route("Student/[controller]")]
     [ApiController]
     public class StudentController : ControllerBase
     {
@@ -28,6 +28,12 @@ namespace WTSuccess.API.Controllers
             _studentService.Add(student);
         }
 
+        [HttpPost("AddCourse")]
+        public void Add(ulong courseId, ulong studentId)
+        {
+            _studentService.AddCourse(courseId, studentId);
+        }
+
         [HttpPut("id")]
         public void Update(ulong id, StudentRequestModel student)
         {
@@ -40,7 +46,7 @@ namespace WTSuccess.API.Controllers
             _studentService.Delete(id);
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet()]
         public IEnumerable<StudentResponseModel> GetAll(int pageList, int pageNumber)
         {
             return _studentService.GetAll(pageList, pageNumber);

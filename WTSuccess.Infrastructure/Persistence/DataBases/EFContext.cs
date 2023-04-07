@@ -14,11 +14,11 @@ namespace WTSuccess.Infrastructure.Persistence.DataBases
     {
         public EFContext(DbContextOptions<EFContext> options) : base(options)
         {
-            
+
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=WTSuccess;Username=postgres;Password=2415");
+            optionsBuilder.UseLazyLoadingProxies().UseNpgsql("Host=localhost;Port=5432;Database=WTSuccess;Username=postgres;Password=2415");
             base.OnConfiguring(optionsBuilder);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

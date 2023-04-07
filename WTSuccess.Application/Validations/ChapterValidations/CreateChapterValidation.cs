@@ -13,7 +13,7 @@ namespace WTSuccess.Application.Validations.ChapterValidations
         public CreateChapterValidation()
         {
             RuleFor(chap => chap.Name).NotNull().NotEmpty();
-            RuleFor(chap => chap.Students).NotEmpty().NotNull();
+            //RuleFor(chap => chap.Students).NotEmpty().NotNull();
         }
     }
 }

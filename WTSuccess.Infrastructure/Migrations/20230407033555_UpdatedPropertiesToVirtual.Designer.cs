@@ -11,8 +11,8 @@ using WTSuccess.Infrastructure.Persistence.DataBases;
 namespace WTSuccess.Infrastructure.Migrations
 {
     [DbContext(typeof(EFContext))]
-    [Migration("20230327073825_GenderToStudentAdded")]
-    partial class GenderToStudentAdded
+    [Migration("20230407033555_UpdatedPropertiesToVirtual")]
+    partial class UpdatedPropertiesToVirtual
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,9 @@ namespace WTSuccess.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.4")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -45,8 +48,12 @@ namespace WTSuccess.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(20,0)");
 
-                    b.Property<decimal>("CourseId")
+                    b.Property<decimal?>("CourseId")
                         .HasColumnType("numeric(20,0)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -139,9 +146,7 @@ namespace WTSuccess.Infrastructure.Migrations
                 {
                     b.HasOne("WTSuccess.Domain.Models.Course", "Course")
                         .WithMany("Chapters")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CourseId");
 
                     b.Navigation("Course");
                 });

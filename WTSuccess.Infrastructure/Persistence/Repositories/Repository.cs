@@ -19,33 +19,33 @@ namespace WTSuccess.Infrastructure.Persistence.Repositories
             _set = context.Set<TEntity>();
             _context = context;
         }
-        public void Add(TEntity entity)
+        public virtual void Add(TEntity entity)
         {
             _set.Add(entity);
         }
 
-        public void Delete(TEntity entity)
+        public virtual void Delete(TEntity entity)
         {
             _set.Remove(entity);
         }
 
-        public TEntity FindById(ulong id)
+        public virtual TEntity FindById(ulong id)
         {
             var foundEntity = _set.Find(id);
-            if (foundEntity == null) throw new ArgumentNullException(nameof(foundEntity));
+            if (foundEntity == null) throw new ArgumentNullException(nameof(TEntity));
             return foundEntity;
         }
 
 
-        public IQueryable<TEntity> GetAll(int pageList, int pageNumber)
+        public virtual IQueryable<TEntity> GetAll(int pageList, int pageNumber)
         {
             return _set.Skip<TEntity>(pageList * pageNumber).Take<TEntity>(pageList);
         }
 
-        public int SaveChanges() => _context.SaveChanges();
+        public virtual int SaveChanges() => _context.SaveChanges();
 
 
-        public void Update(TEntity entity)
+        public virtual void Update(TEntity entity)
         {
             _set.Update(entity);
         }

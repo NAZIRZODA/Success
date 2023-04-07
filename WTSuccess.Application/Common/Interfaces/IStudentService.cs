@@ -12,5 +12,6 @@ namespace WTSuccess.Application.Common.Interfaces
 {
     public interface IStudentService : IBaseService<Student, StudentResponseModel, StudentRequestModel>
     {
+        public void AddCourse(ulong courseId, ulong studentId);
     }
 }

@@ -16,9 +16,9 @@ namespace WTSuccess.Application.Services
 {
     public class ChapterService : BaseService<Chapter, ChapterResponseModel, ChapterRequestModel>, IChapterService
     {
-        private readonly IRepository<Chapter> _repository;
+        private readonly IChapterRepository _repository;
         private readonly IMapper _mapper;
-        public ChapterService(IRepository<Chapter> repository, IMapper mapper) : base(repository, mapper)
+        public ChapterService(IChapterRepository repository, IMapper mapper) : base(repository, mapper)
         {
             _repository = repository;
             _mapper = mapper;
@@ -53,9 +53,10 @@ namespace WTSuccess.Application.Services
             var dbChapter = _repository.FindById(id);
             if (dbChapter == null) throw new ArgumentNullException(nameof(Chapter));
             var chapterRequestToUpdate = request as UpdateChapterRequestModel;
-            dbChapter.Topics = chapterRequestToUpdate.Topics;
-            dbChapter.Course = chapterRequestToUpdate.Course;
-            dbChapter.CourseId = chapterRequestToUpdate.CourseId;
+            dbChapter.Name = request.Name;
+            //dbChapter.Topics = chapterRequestToUpdate.Topics;
+            //dbChapter.Course = chapterRequestToUpdate.Course;
+            //dbChapter.CourseId = chapterRequestToUpdate.CourseId;
             _repository.Update(dbChapter);
             _repository.SaveChanges();
             return _mapper.Map<UpdateChapterRequestModel, ChapterResponseModel>(chapterRequestToUpdate);

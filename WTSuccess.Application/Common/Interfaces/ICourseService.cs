@@ -13,6 +13,6 @@ namespace WTSuccess.Application.Common.Interfaces
 {
     public interface ICourseService : IBaseService<Course, CourseResponseModel, CourseRequestModel>
     {
-
+        public void AddChapter(ulong chapterId, ulong courseId);
     }
 }

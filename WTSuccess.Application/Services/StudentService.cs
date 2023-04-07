@@ -15,12 +15,15 @@ namespace WTSuccess.Application.Services
 {
     public class StudentService : BaseService<Student, StudentResponseModel, StudentRequestModel>, IStudentService
     {
-        private readonly IRepository<Student> _repository;
+        private readonly IStudentRepository _studentRepository;
+        private readonly ICourseRepository _courseReposirory;
         private readonly IMapper _mapper;
-        public StudentService(IRepository<Student> repository, IMapper mapper) : base(repository, mapper)
+
+        public StudentService(IStudentRepository repository, IMapper mapper, ICourseRepository courseReposirory) : base(repository, mapper)
         {
-            _repository = repository;
+            _studentRepository = repository;
             _mapper = mapper;
+            _courseReposirory = courseReposirory;
         }
 
         public override void Add(StudentRequestModel request)
@@ -28,13 +31,13 @@ namespace WTSuccess.Application.Services
             var parsedToCreate = request as CreateStudentRequestModel;
             if (parsedToCreate == null) throw new ArgumentNullException(nameof(Student));
             var mappedToStudent = _mapper.Map<CreateStudentRequestModel, Student>(parsedToCreate);
-            _repository.Add(mappedToStudent);
-            _repository.SaveChanges();
+            _studentRepository.Add(mappedToStudent);
+            _studentRepository.SaveChanges();
         }
 
         public override StudentResponseModel Get(ulong id)
         {
-            var dbStudent = _repository.FindById(id);
+            var dbStudent = _studentRepository.FindById(id);
             if (dbStudent == null) throw new ArgumentNullException(nameof(Student));
             var mappedToResponse = _mapper.Map<Student, StudentResponseModel>(dbStudent);
             return mappedToResponse;
@@ -42,33 +45,43 @@ namespace WTSuccess.Application.Services
 
         public override IEnumerable<StudentResponseModel> GetAll(int pageList, int pageNumber)
         {
-            var dbStudents = _repository.GetAll(pageList, pageNumber);
+            var dbStudents = _studentRepository.GetAll(pageList, pageNumber);
             var mappedToRespones = _mapper.Map<IEnumerable<Student>, IEnumerable<StudentResponseModel>>(dbStudents);
             return mappedToRespones;
         }
 
         public override StudentResponseModel Update(ulong id, StudentRequestModel request)
         {
-            var dbStudent = _repository.FindById(id);
+            var dbStudent = _studentRepository.FindById(id);
             if (dbStudent == null) throw new ArgumentNullException(nameof(Student));
             var studentRequestToUpdate = request as UpdateStudentRequestModel;
             dbStudent.Name = studentRequestToUpdate.Name;
             dbStudent.Surname = studentRequestToUpdate.Surname;
             dbStudent.Email = studentRequestToUpdate.Email;
             dbStudent.Password = studentRequestToUpdate.Password;
-            _repository.Update(dbStudent);
-            _repository.SaveChanges();
+            _studentRepository.Update(dbStudent);
+            _studentRepository.SaveChanges();
             return _mapper.Map<UpdateStudentRequestModel, StudentResponseModel>(studentRequestToUpdate);
         }
 
         public override bool Delete(ulong id)
         {
-            var dbStudent = _repository.FindById(id);
+            var dbStudent = _studentRepository.FindById(id);
             if (dbStudent == null) throw new ArgumentNullException(nameof(Student));
-            _repository.Delete(dbStudent);
-            _repository.SaveChanges();
+            _studentRepository.Delete(dbStudent);
+            _studentRepository.SaveChanges();
             return true;
         }
 
+        public void AddCourse(ulong courseId, ulong studentId)
+        {
+            var course = _courseReposirory.FindById(courseId);
+            if (course == null) throw new ArgumentNullException(nameof(Course));
+            var student = _studentRepository.FindById(studentId);
+            if (student == null) throw new ArgumentNullException(nameof(Student));
+            student.Courses.Add(course);
+            _studentRepository.AddCourse(student);
+            _studentRepository.SaveChanges();
+        }
     }
 }
